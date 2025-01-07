@@ -1,4 +1,3 @@
-
 # GeneticOversampler
 
 **GeneticOversampler** is a Python-based library designed to address the class imbalance problem in datasets through oversampling. It uses advanced techniques such as genetic algorithms, clustering, hybrid distance metrics, and machine learning models to generate synthetic samples, improving model performance on imbalanced data.
@@ -32,25 +31,25 @@ The core of the project is a genetic algorithm that generates synthetic samples 
 2. **Fitness Evaluation**:
    - Combines machine learning model confidence with domain-based penalties.
    - Example formula for fitness evaluation:
-     \[
-     F_{\text{fitness}} = \max \left( \alpha \cdot P_{\text{model}} + \beta \cdot \left[ 1 - \text{sigmoid}(L) \right], 0 \right)
-     \]
-   - Where:
-     - \( P_{\text{model}} \): Prediction confidence of the ML model.
-     - \( L \): Domain-based loss.
-     - \( \alpha, \beta \): Weighting coefficients.
+     ```
+     F_fitness = max(α * P_model + β * (1 - sigmoid(L)), 0)
+     ```
+     Where:
+     - `P_model`: Prediction confidence of the ML model.
+     - `L`: Domain-based loss.
+     - `α, β`: Weighting coefficients.
 3. **Crossover and Mutation**:
    - Produces new samples by combining features from parent samples with random mutations for diversity.
 
 #### Fitness Function Examples:
 - **Inland/Borderline Loss**:
-  \[
-  L = 0.5 \cdot \left[ \text{MaxDist}(I, \text{neighbors})^2 + \max(0, \text{Margin} - \text{MaxDist}(I, M))^2 \right]
-  \]
+  ```
+  L = 0.5 * [MaxDist(I, neighbors)^2 + max(0, Margin - MaxDist(I, M))^2]
+  ```
 - **Trapped Loss**:
-  \[
-  L = 0.5 \cdot \left( \text{cosine similarity penalty} + \text{distance-based penalty} \right)
-  \]
+  ```
+  L = 0.5 * (cosine similarity penalty + distance-based penalty)
+  ```
 
 ---
 
@@ -61,17 +60,17 @@ Identifies minority class samples as:
 - **Trapped**: Minority samples surrounded by majority samples.
 
 #### Density Calculation:
-\[
-\text{Density}(i) = \sum_{j \neq i} \exp \left( -\frac{d_{ij}^2}{d_c^2} \right)
-\]
+```
+Density(i) = Σ_{j ≠ i} exp(-d_ij^2 / d_c^2)
+```
 Where:
-- \( d_{ij} \): Distance between samples \( i \) and \( j \).
-- \( d_c \): Cutoff distance (quantile-based).
+- `d_ij`: Distance between samples `i` and `j`.
+- `d_c`: Cutoff distance (quantile-based).
 
 #### Importance Score:
-\[
-\text{Importance} = \sigma_w \cdot \text{Normalized}(\sigma) + (1 - \sigma_w) \cdot \text{Normalized}(\text{Density})
-\]
+```
+Importance = σ_w * Normalized(σ) + (1 - σ_w) * Normalized(Density)
+```
 
 ---
 
@@ -79,11 +78,11 @@ Where:
 Handles mixed data types (categorical and continuous) by computing weighted distances.
 
 #### Formula:
-\[
-\text{Distance}(i, j) = \sqrt{ \sum_{k} \left( \frac{|x_{ik} - x_{jk}|}{4 \cdot \text{std}(k)} \right)^2 + \sum_{l} w_l \cdot \mathbb{1}(x_{il} \neq x_{jl}) }
-\]
+```
+Distance(i, j) = √(Σ_k(|x_ik - x_jk| / (4 * std(k)))^2 + Σ_l(w_l * indicator(x_il ≠ x_jl)))
+```
 Where:
-- \( w_l \): Entropy-derived weight for categorical feature \( l \).
+- `w_l`: Entropy-derived weight for categorical feature `l`.
 
 ---
 
